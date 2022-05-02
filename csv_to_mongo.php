@@ -99,7 +99,14 @@ foreach ($csv as $row) {
 
     // update based on address and city. 
     $filter = [ 'city' => $row['city'], 'address' => $row['address'] ];
-    $mongo_bulk_write->update($filter, [ '$set' => $row, '$unset' => $unset ], ['upsert' => true]);
+
+    if(empty($unset)) {
+        $mongo_bulk_write->update($filter, [ '$set' => $row ], ['upsert' => true]);
+    }
+    else {
+        $mongo_bulk_write->update($filter, [ '$set' => $row, '$unset' => $unset ], ['upsert' => true]);
+    }
+
 }
 
 if($deleteMode) {
